@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pendaftaran Online - RS Sehat Sejahtera</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .logo {
+      width: 180px;
+      height: 40px;
+      background-color: #0077cc;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      margin: 0 auto 15px;
+      font-weight: bold;
+    }
+    
+    h1 {
+      color: #0077cc;
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+    
+    p.subtitle {
+      color: #555;
+      margin-bottom: 20px;
+    }
+    
+    .form-container {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 30px;
+    }
+    
+    .progress-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    
+    .progress-bar::before {
+      content: '';
+      position: absolute;
+      top: 15px;
+      left: 0;
+      height: 4px;
+      width: 100%;
+      background-color: #e0e0e0;
+      z-index: 1;
+    }
+    
+    .progress-bar.step1::after {
+      content: '';
+      position: absolute;
+      top: 15px;
+      left: 0;
+      height: 4px;
+      width: 33%;
+      background-color: #0077cc;
+      z-index: 2;
+      transition: width 0.3s ease;
+    }
+    
+    .progress-bar.step2::after {
+      content: '';
+      position: absolute;
+      top: 15px;
+      left: 0;
+      height: 4px;
+      width: 66%;
+      background-color: #0077cc;
+      z-index: 2;
+      transition: width 0.3s ease;
+    }
+    
+    .progress-bar.step3::after {
+      content: '';
+      position: absolute;
+      top: 15px;
+      left: 0;
+      height: 4px;
+      width: 100%;
+      background-color: #0077cc;
+      z-index: 2;
+      transition: width 0.3s ease;
+    }
+    
+    .step {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background-color: white;
+      border: 3px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      position: relative;
+      z-index: 3;
+    }
+    
+    .step.active {
+      border-color: #0077cc;
+      background-color: #0077cc;
+      color: white;
+    }
+    
+    .step.completed {
+      border-color: #0077cc;
+      color: #0077cc;
+    }
+    
+    .step-label {
+      position: absolute;
+      top: 40px;
+      font-size: 14px;
+      color: #777;
+      width: 100px;
+      text-align: center;
+      left: -33px;
+    }
+    
+    .step.active .step-label {
+      color: #0077cc;
+      font-weight: bold;
+    }
+    
+    .step.completed .step-label {
+      color: #0077cc;
+    }
+    
+    .alert-container {
+      margin: 20px 0;
+    }
+    
+    .form-section {
+      margin-bottom: 25px;
+    }
+    
+    .form-section h2 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #0077cc;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 10px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #444;
+    }
+    
+    label.required::after {
+      content: ' *';
+      color: #e74c3c;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: border 0.3s ease;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #0077cc;
+      box-shadow: 0 0 0 3px rgba(0,119,204,0.1);
+    }
+    
+    .radio-group {
+      display: flex;
+      gap: 20px;
+      margin-top: 5px;
+    }
+    
+    .radio-option {
+      display: flex;
+      align-items: center;
+    }
+    
+    .radio-option input {
+      width: auto;
+      margin-right: 5px;
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .form-row .form-group {
+      flex: 1;
+    }
+    
+    small {
+      display: block;
+      color: #777;
+      margin-top: 5px;
+      font-size: 13px;
+    }
+    
+    .error {
+      color: #e74c3c;
+      font-size: 13px;
+      margin-top: 5px;
+      display: none;
+    }
+    
+    .btn-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    
+    .btn {
+      padding: 12px 24px;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .btn:hover {
+      background-color: #005fa3;
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid #0077cc;
+      color: #0077cc;
+    }
+    
+    .btn-outline:hover {
+      background-color: rgba(0,119,204,0.1);
+    }
+    
+    .help-tip {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background-color: #777;
+      color: white;
+      text-align: center;
+      line-height: 18px;
+      font-size: 12px;
+      margin-left: 5px;
+      cursor: help;
+      position: relative;
+    }
+    
+    .help-tip:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      white-space: nowrap;
+      z-index: 10;
+    }
+    
+    .alert {
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    
+    .alert-info {
+      background-color: #e1f5fe;
+      border-left: 4px solid #0077cc;
+      color: #01579b;
+    }
+    
+    .checkbox-option {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    
+    .checkbox-option input {
+      width: auto;
+      margin-right: 10px;
+      margin-top: 5px;
+    }
+    
+    .calendar-section {
+      margin-bottom: 30px;
+    }
+    
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      margin-bottom: 15px;
+    }
+    
+    .calendar-day {
+      text-align: center;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .calendar-day.available {
+      background-color: #e3f2fd;
+      border: 1px solid #0077cc;
+      cursor: pointer;
+    }
+    
+    .calendar-day.selected {
+      background-color: #0077cc;
+      color: white;
+    }
+    
+    .calendar-day.disabled {
+      background-color: #f0f0f0;
+      color: #aaa;
+      cursor: not-allowed;
+    }
+    
+    .time-slots {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .time-slot {
+      text-align: center;
+      padding: 10px;
+      background-color: #e3f2fd;
+      border: 1px solid #0077cc;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .time-slot.selected {
+      background-color: #0077cc;
+      color: white;
+    }
+    
+    .time-slot.disabled {
+      background-color: #f0f0f0;
+      color: #aaa;
+      cursor: not-allowed;
+    }
+    
+    .summary-section {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    
+    .summary-section h3 {
+      color: #0077cc;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    
+    .summary-row {
+      display: flex;
+      margin-bottom: 8px;
+    }
+    
+    .summary-label {
+      width: 40%;
+      font-weight: 500;
+    }
+    
+    .summary-value {
+      width: 60%;
+    }
+    
+    .doctor-selection {
+      margin-bottom: 20px;
+    }
+    
+    .doctor-card {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .doctor-card:hover {
+      border-color: #0077cc;
+      background-color: #f0f7ff;
+    }
+    
+    .doctor-card.selected {
+      border-color: #0077cc;
+      background-color: #e3f2fd;
+    }
+    
+    .doctor-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+    }
+    
+    .doctor-info {
+      flex: 1;
+    }
+    
+    .doctor-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .doctor-specialty {
+      color: #666;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 600px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      
+      .progress-bar {
+        margin-bottom: 50px;
+      }
+      
+      .btn-container {
+        flex-direction: column-reverse;
+        gap: 10px;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+      
+      .time-slots {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .calendar-days {
+        font-size: 14px;
+      }
+    }
+    
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">RS SEHAT SEJAHTERA</div>
+      <h1>Pendaftaran Online Pasien</h1>
+      <p class="subtitle">Isi formulir berikut untuk mendaftar pemeriksaan atau perawatan</p>
+    </header>
+    
+    <!-- Form 1: Data Pribadi -->
+    <div class="form-container" id="form1">
+      <div class="progress-bar step1">
+        <div class="step active">
+          1
+          <span class="step-label">Data Pribadi</span>
+        </div>
+        <div class="step">
+          2
+          <span class="step-label">Informasi Medis</span>
+        </div>
+        <div class="step">
+          3
+          <span class="step-label">Jadwal & Konfirmasi</span>
+        </div>
+      </div>
+      <p> <br> </p>
+      
+      <div class="alert-container">
+        <div class="alert alert-info">
+          Data yang ditandai dengan tanda bintang (*) wajib diisi. Pastikan data yang Anda isi sudah benar.
+        </div>
+      </div>
+      
+      <form id="registrationForm">
+        <div class="form-section">
+          <h2>Data Pribadi</h2>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="idType" class="required">Jenis Identitas</label>
+              <select id="idType" name="idType" required>
+                <option value="">-- Pilih Jenis Identitas --</option>
+                <option value="ktp">KTP</option>
+                <option value="sim">SIM</option>
+                <option value="passport">Paspor</option>
+                <option value="belumpunya">Belum Punya</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="idNumber" class="required">Nomor Identitas</label>
+              <input type="text" id="idNumber" name="idNumber" placeholder="Masukkan nomor identitas" required>
+              <div class="error">Nomor identitas tidak valid</div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fullName" class="required">Nama Lengkap</label>
+              <input type="text" id="fullName" name="fullName" placeholder="Masukkan nama lengkap sesuai identitas" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="birthDate" class="required">Tanggal Lahir</label>
+              <input type="date" id="birthDate" name="birthDate" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="required">Jenis Kelamin</label>
+            <div class="radio-group">
+              <div class="radio-option">
+                <input type="radio" id="male" name="gender" value="male" required>
+                <label for="male">Laki-laki</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="female" name="gender" value="female">
+                <label for="female">Perempuan</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="address" class="required">Alamat Lengkap</label>
+            <textarea id="address" name="address" rows="3" placeholder="Masukkan alamat lengkap tempat tinggal" required></textarea>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone" class="required">Nomor HP</label>
+              <input type="tel" id="phone" name="phone" placeholder="Contoh: 08123456789" required>
+              <small>Pastikan nomor HP aktif untuk menerima notifikasi</small>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="Contoh: nama@email.com">
+              <small>Opsional, untuk pengiriman konfirmasi jadwal</small>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="emergencyContact" class="required">Kontak Darurat</label>
+            <input type="text" id="emergencyContact" name="emergencyContact" placeholder="Nama & nomor telepon kerabat yang dapat dihubungi" required>
+          </div>
+        </div>
+        
+        <div class="btn-container">
+          <button type="button" class="btn btn-outline" disabled>Kembali</button>
+          <button type="button" class="btn" id="form1Next">Lanjutkan</button>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Form 2: Informasi Medis -->
+    <div class="form-container hidden" id="form2">
+      <div class="progress-bar step2">
+        <div class="step completed">
+          1
+          <span class="step-label">Data Pribadi</span>
+        </div>
+        <div class="step active">
+          2
+          <span class="step-label">Informasi Medis</span>
+        </div>
+        <div class="step">
+          3
+          <span class="step-label">Jadwal & Konfirmasi</span>
+        </div>
+      </div>
+
+      <p> <br> </p>
+      
+      <div class="alert-container">
+        <div class="alert alert-info">
+          Data yang ditandai dengan tanda bintang (*) wajib diisi. Informasi medis ini untuk membantu dokter dalam memberikan pelayanan yang tepat.
+        </div>
+      </div>
+      
+      <form id="medicalForm">
+        <div class="form-section">
+          <h2>Informasi Medis</h2>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="visitType" class="required">Jenis Kunjungan</label>
+              <select id="visitType" name="visitType" required>
+                <option value="">-- Pilih Jenis Kunjungan --</option>
+                <option value="rawatJalan">Rawat Jalan</option>
+                <option value="kontrol">Kontrol Rutin</option>
+                <option value="medical-checkup">Medical Check-up</option>
+                <option value="konsultasi">Konsultasi</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="patientType" class="required">Kategori Pasien</label>
+              <select id="patientType" name="patientType" required>
+                <option value="">-- Pilih Kategori --</option>
+                <option value="baru">Pasien Baru</option>
+                <option value="lama">Pasien Lama</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group" id="medicalRecordGroup">
+            <label for="medicalRecord">Nomor Rekam Medis</label>
+            <input type="text" id="medicalRecord" name="medicalRecord" placeholder="Masukkan nomor rekam medis (untuk pasien lama)">
+            <small>Isi jika Anda adalah pasien yang pernah berobat sebelumnya</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="department" class="required">Poliklinik / Spesialisasi</label>
+            <select id="department" name="department" required>
+              <option value="">-- Pilih Poliklinik --</option>
+              <option value="umum">Poli Umum</option>
+              <option value="penyakitDalam">Poli Penyakit Dalam</option>
+              <option value="anak">Poli Anak</option>
+              <option value="bedah">Poli Bedah</option>
+              <option value="mata">Poli Mata</option>
+              <option value="gigi">Poli Gigi</option>
+              <option value="jiwa">Poli Kesehatan Jiwa</option>
+              <option value="kandungan">Poli Kandungan</option>
+              <option value="jantung">Poli Jantung</option>
+              <option value="kulit">Poli Kulit & Kelamin</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="symptoms" class="required">Keluhan Utama</label>
+            <textarea id="symptoms" name="symptoms" rows="3" placeholder="Jelaskan keluhan/gejala yang Anda alami" required></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Riwayat Penyakit</label>
+            <div class="checkbox-option">
+              <input type="checkbox" id="diseaseHypertension" name="disease" value="hipertensi">
+              <label for="diseaseHypertension">Hipertensi / Tekanan Darah Tinggi</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="diseaseDiabetes" name="disease" value="diabetes">
+              <label for="diseaseDiabetes">Diabetes / Kencing Manis</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="diseaseAsthma" name="disease" value="asma">
+              <label for="diseaseAsthma">Asma</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="diseaseHeart" name="disease" value="jantung">
+              <label for="diseaseHeart">Penyakit Jantung</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="diseaseStroke" name="disease" value="stroke">
+              <label for="diseaseStroke">Stroke</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="diseaseOther" name="disease" value="lainnya">
+              <label for="diseaseOther">Lainnya</label>
+            </div>
+          </div>
+          
+          <div class="form-group" id="diseaseOtherGroup">
+            <label for="diseaseOtherText">Sebutkan Penyakit Lainnya</label>
+            <input type="text" id="diseaseOtherText" name="diseaseOtherText" placeholder="Masukkan riwayat penyakit lainnya">
+          </div>
+          
+          <div class="form-group">
+            <label>Riwayat Alergi</label>
+            <div class="checkbox-option">
+              <input type="checkbox" id="allergyDrug" name="allergy" value="obat">
+              <label for="allergyDrug">Obat-obatan</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="allergyFood" name="allergy" value="makanan">
+              <label for="allergyFood">Makanan</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="allergyOther" name="allergy" value="lainnya">
+              <label for="allergyOther">Lainnya</label>
+            </div>
+          </div>
+          
+          <div class="form-group" id="allergyDetailGroup">
+            <label for="allergyDetail">Detail Alergi</label>
+            <textarea id="allergyDetail" name="allergyDetail" rows="2" placeholder="Sebutkan detail alergi yang Anda miliki"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="insuranceType">Jenis Pembayaran</label>
+            <select id="insuranceType" name="insuranceType">
+              <option value="">-- Pilih Jenis Pembayaran --</option>
+              <option value="umum">Umum / Pribadi</option>
+              <option value="bpjs">BPJS Kesehatan</option>
+              <option value="asuransi">Asuransi Lainnya</option>
+              <option value="perusahaan">Perusahaan</option>
+            </select>
+          </div>
+          
+          <div class="form-group" id="insuranceNumberGroup">
+            <label for="insuranceNumber">Nomor Kartu BPJS / Asuransi</label>
+            <input type="text" id="insuranceNumber" name="insuranceNumber" placeholder="Masukkan nomor kartu">
+          </div>
+        </div>
+        
+        <div class="btn-container">
+          <button type="button" class="btn btn-outline" id="form2Back">Kembali</button>
+          <button type="button" class="btn" id="form2Next">Lanjutkan</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Form 3: Jadwal & Konfirmasi -->
+    <div class="form-container hidden" id="form3">
+      <div class="progress-bar step3">
+        <div class="step completed">
+          1
+          <span class="step-label">Data Pribadi</span>
+        </div>
+        <div class="step completed">
+          2
+          <span class="step-label">Informasi Medis</span>
+        </div>
+        <div class="step active">
+          3
+          <span class="step-label">Jadwal & Konfirmasi</span>
+        </div>
+      </div>
+
+      <p> <br> </p>
+      
+      <div class="alert-container">
+        <div class="alert alert-info">
+          Silakan pilih dokter, tanggal, dan jam kunjungan yang sesuai dengan kebutuhan Anda.
+        </div>
+      </div>
+      
+      <form id="scheduleForm">
+        <div class="form-section">
+          <h2>Pilih Dokter</h2>
+          
+          <div class="doctor-selection">
+            <div class="doctor-card" data-doctor-id="dr001">
+              <div class="doctor-img">DR</div>
+              <div class="doctor-info">
+                <div class="doctor-name">dr. Budi Santoso, Sp.PD</div>
+                <div class="doctor-specialty">Spesialis Penyakit Dalam</div>
+                <div>Jadwal: Senin-Jumat, 08:00-14:00</div>
+              </div>
+            </div>
+            
+            <div class="doctor-card" data-doctor-id="dr002">
+              <div class="doctor-img">DR</div>
+              <div class="doctor-info">
+                <div class="doctor-name">dr. Maya Wijaya, Sp.A</div>
+                <div class="doctor-specialty">Spesialis Anak</div>
+                <div>Jadwal: Senin, Rabu, Jumat, 09:00-15:00</div>
+              </div>
+            </div>
+            
+            <div class="doctor-card" data-doctor-id="dr003">
+              <div class="doctor-img">DR</div>
+              <div class="doctor-info">
+                <div class="doctor-name">dr. Hendra Wijaya, Sp.B</div>
+                <div class="doctor-specialty">Spesialis Bedah</div>
+                <div>Jadwal: Selasa, Kamis, Sabtu, 10:00-16:00</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-section">
+          <h2>Pilih Tanggal & Waktu</h2>
+          
+          <div class="calendar-section">
+            <div class="calendar-header">
+              <button type="button" class="btn btn-outline" id="prevMonth">&lt; Bulan Lalu</button>
+              <h3 id="currentMonth">April 2025</h3>
+              <button type="button" class="btn btn-outline" id="nextMonth">Bulan Depan &gt;</button>
+            </div>
+            
+            <div class="calendar-days">
+              <div class="calendar-day">Min</div>
+              <div class="calendar-day">Sen</div>
+              <div class="calendar-day">Sel</div>
+              <div class="calendar-day">Rab</div>
+              <div class="calendar-day">Kam</div>
+              <div class="calendar-day">Jum</div>
+              <div class="calendar-day">Sab</div>
+              
+              <div class="calendar-day disabled"></div>
+              <div class="calendar-day disabled"></div>
+              <div class="calendar-day">1</div>
+              <div class="calendar-day">2</div>
+              <div class="calendar-day">3</div>
+              <div class="calendar-day">4</div>
+              <div class="calendar-day">5</div>
+              
+              <div class="calendar-day">6</div>
+              <div class="calendar-day available">7</div>
+              <div class="calendar-day available">8</div>
+              <div class="calendar-day available">9</div>
+              <div class="calendar-day available">10</div>
+              <div class="calendar-day available">11</div>
+              <div class="calendar-day">12</div>
+              
+              <div class="calendar-day">13</div>
+              <div class="calendar-day available">14</div>
+              <div class="calendar-day available selected">15</div>
+              <div class="calendar-day available">16</div>
+              <div class="calendar-day available">17</div>
+              <div class="calendar-day available">18</div>
+              <div class="calendar-day">19</div>
+              
+              <div class="calendar-day">20</div>
+              <div class="calendar-day available">21</div>
+              <div class="calendar-day available">22</div>
+              <div class="calendar-day available">23</div>
+              <div class="calendar-day available">24</div>
+              <div class="calendar-day available">25</div>
+              <div class="calendar-day">26</div>
+              
+              <div class="calendar-day">27</div>
+              <div class="calendar-day available">28</div>
+              <div class="calendar-day available">29</div>
+              <div class="calendar-day available">30</div>
+              <div class="calendar-day disabled"></div>
+              <div class="calendar-day disabled"></div>
+              <div class="calendar-day disabled"></div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Waktu Kunjungan yang Tersedia</label>
+            <div class="time-slots">
+              <div class="time-slot">08:00</div>
+              <div class="time-slot">09:00</div>
+              <div class="time-slot selected">10:00</div>
+              <div class="time-slot">11:00</div>
+              <div class="time-slot">13:00</div>
+              <div class="time-slot">14:00</div>
+              <div class="time-slot disabled">15:00</div>
+              <div class="time-slot disabled">16:00</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-section">
+          <h2>Catatan Tambahan</h2>
+          <div class="form-group">
+            <label for="additionalNotes">Catatan Tambahan untuk Dokter (Opsional)</label>
+            <textarea id="additionalNotes" name="additionalNotes" rows="3" placeholder="Masukkan informasi tambahan yang mungkin perlu diketahui dokter"></textarea>
+          </div>
+        </div>
+        
+        <div class="form-section summary-section">
+          <h2>Ringkasan Jadwal</h2>
+          
+          <div class="summary-row">
+            <div class="summary-label">Nama Pasien:</div>
+            <div class="summary-value" id="summaryName">Ahmad Fauzi</div>
+          </div>
+          
+          <div class="summary-row">
+            <div class="summary-label">Poliklinik:</div>
+            <div class="summary-value" id="summaryDepartment">Poli Penyakit Dalam</div>
+          </div>
+          
+          <div class="summary-row">
+            <div class="summary-label">Dokter:</div>
+            <div class="summary-value" id="summaryDoctor">dr. Budi Santoso, Sp.PD</div>
+          </div>
+          
+          <div class="summary-row">
+            <div class="summary-label">Tanggal Kunjungan:</div>
+            <div class="summary-value" id="summaryDate">15 April 2025</div>
+          </div>
+          
+          <div class="summary-row">
+            <div class="summary-label">Waktu Kunjungan:</div>
+            <div class="summary-value" id="summaryTime">10:00 WIB</div>
+          </div>
+          
+          <div class="summary-row">
+            <div class="summary-label">Jenis Kunjungan:</div>
+            <div class="summary-value" id="summaryVisitType">Rawat Jalan</div>
+          </div>
+          
+          <div class="summary-row">
+            <div class="summary-label">Metode Pembayaran:</div>
+            <div class="summary-value" id="summaryPayment">BPJS Kesehatan</div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <div class="checkbox-option">
+            <input type="checkbox" id="termsAgreement" name="termsAgreement" required>
+            <label for="termsAgreement" class="required">Saya menyetujui bahwa informasi yang saya berikan adalah benar dan akurat. Saya memahami bahwa jadwal dapat berubah jika ada keadaan darurat.</label>
+          </div>
+        </div>
+        
+        <div class="btn-container">
+          <button type="button" class="btn btn-outline" id="form3Back">Kembali</button>
+          <button type="submit" class="btn" id="submitForm">Konfirmasi Pendaftaran</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Form Confirmation/Success Page -->
+    <div class="form-container hidden" id="formSuccess">
+      <div class="form-section" style="text-align: center;">
+        <svg width="80" height="80" viewBox="0 0 24 24" style="margin: 0 auto 20px; fill: #4CAF50;">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        
+        <h2 style="color: #4CAF50; margin-bottom: 20px;">Pendaftaran Berhasil!</h2>
+        
+        <p>Terima kasih telah mendaftar di RS Sehat Sejahtera.</p>
+        <p style="margin-bottom: 20px;">Nomor registrasi Anda adalah: <strong id="registrationNumber">RS25041500123</strong></p>
+        
+        <div class="summary-section">
+          <h3>Detail Pendaftaran</h3>
+          
+          <div class="summary-row">
+            <div class="summary-label">Nama Pasien:</div>
+            <div class="summary-value" id="successName">Ahmad Fauzi</div>
+          </div>
+          
+          <div class="summary-row">
+            <div class="summary-label">Dokter:</div>
+            <div class="summary-value" id="successDoctor">dr. Budi Santoso, Sp.PD</div>
+          </div>
+          
+          <div class="summary-row">
+            <div class="summary-label">Tanggal & Waktu:</div>
+            <div class="summary-value" id="successDateTime">15 April 2025, 10:00 WIB</div>
+          </div>
+          
+          <div class="summary-row">
+            <div class="summary-label">Poliklinik:</div>
+            <div class="summary-value" id="successDepartment">Poli Penyakit Dalam</div>
+          </div>
+        </div>
+        
+        <p style="margin: 20px 0;">Informasi pendaftaran telah dikirim ke kontak yang Anda berikan. Silakan datang 30 menit sebelum jadwal untuk proses administrasi.</p>
+        
+        <div class="btn-container" style="justify-content: center; margin-top: 30px;">
+          <button type="button" class="btn" id="printButton">Cetak Bukti Pendaftaran</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Navigation between forms
+      const form1 = document.getElementById('form1');
+      const form2 = document.getElementById('form2');
+      const form3 = document.getElementById('form3');
+      const formSuccess = document.getElementById('formSuccess');
+      
+      // Navigation buttons
+      const form1Next = document.getElementById('form1Next');
+      const form2Back = document.getElementById('form2Back');
+      const form2Next = document.getElementById('form2Next');
+      const form3Back = document.getElementById('form3Back');
+      const submitForm = document.getElementById('submitForm');
+      const printButton = document.getElementById('printButton');
+      
+      // Form 1 to Form 2 navigation
+      form1Next.addEventListener('click', function() {
+        // Simple validation for required fields
+        const requiredFields = form1.querySelectorAll('[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+          if (!field.value) {
+            isValid = false;
+            field.style.borderColor = '#e74c3c';
+          } else {
+            field.style.borderColor = '#ddd';
+          }
+        });
+        
+        if (isValid) {
+          form1.classList.add('hidden');
+          form2.classList.remove('hidden');
+          
+          // Update summary with form1 data
+          document.getElementById('summaryName').textContent = document.getElementById('fullName').value;
+        } else {
+          alert('Harap isi semua field yang wajib diisi.');
+        }
+      });
+      
+      // Form 2 back to Form 1 navigation
+      form2Back.addEventListener('click', function() {
+        form2.classList.add('hidden');
+        form1.classList.remove('hidden');
+      });
+      
+      // Form 2 to Form 3 navigation
+      form2Next.addEventListener('click', function() {
+        // Simple validation for required fields
+        const requiredFields = form2.querySelectorAll('[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+          if (!field.value) {
+            isValid = false;
+            field.style.borderColor = '#e74c3c';
+          } else {
+            field.style.borderColor = '#ddd';
+          }
+        });
+        
+        if (isValid) {
+          form2.classList.add('hidden');
+          form3.classList.remove('hidden');
+          
+          // Update summary with form2 data
+          document.getElementById('summaryDepartment').textContent = 
+            document.getElementById('department').options[document.getElementById('department').selectedIndex].text;
+          document.getElementById('summaryVisitType').textContent = 
+            document.getElementById('visitType').options[document.getElementById('visitType').selectedIndex].text;
+          document.getElementById('summaryPayment').textContent = 
+            document.getElementById('insuranceType').value ? 
+            document.getElementById('insuranceType').options[document.getElementById('insuranceType').selectedIndex].text : 
+            'Umum / Pribadi';
+        } else {
+          alert('Harap isi semua field yang wajib diisi.');
+        }
+      });
+      
+      // Form 3 back to Form 2 navigation
+      form3Back.addEventListener('click', function() {
+        form3.classList.add('hidden');
+        form2.classList.remove('hidden');
+      });
+      
+      // Doctor selection
+      const doctorCards = document.querySelectorAll('.doctor-card');
+      doctorCards.forEach(card => {
+        card.addEventListener('click', function() {
+          doctorCards.forEach(c => c.classList.remove('selected'));
+          this.classList.add('selected');
+          document.getElementById('summaryDoctor').textContent = 
+            this.querySelector('.doctor-name').textContent;
+        });
+      });
+      
+      // Calendar day selection
+      const calendarDays = document.querySelectorAll('.calendar-day.available');
+      calendarDays.forEach(day => {
+        day.addEventListener('click', function() {
+          calendarDays.forEach(d => d.classList.remove('selected'));
+          this.classList.add('selected');
+          
+          // Update summary date (simplified for demo)
+          const selectedDay = this.textContent;
+          const currentMonth = document.getElementById('currentMonth').textContent;
+          document.getElementById('summaryDate').textContent = `${selectedDay} ${currentMonth}`;
+        });
+      });
+      
+      // Time slot selection
+      const timeSlots = document.querySelectorAll('.time-slot:not(.disabled)');
+      timeSlots.forEach(slot => {
+        slot.addEventListener('click', function() {
+          timeSlots.forEach(s => s.classList.remove('selected'));
+          this.classList.add('selected');
+          document.getElementById('summaryTime').textContent = `${this.textContent} WIB`;
+        });
+      });
+      
+      // Form submission
+      submitForm.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        if (document.getElementById('termsAgreement').checked) {
+          form3.classList.add('hidden');
+          formSuccess.classList.remove('hidden');
+          
+          // Update success page data
+          document.getElementById('successName').textContent = document.getElementById('summaryName').textContent;
+          document.getElementById('successDoctor').textContent = document.getElementById('summaryDoctor').textContent;
+          document.getElementById('successDateTime').textContent = 
+            `${document.getElementById('summaryDate').textContent}, ${document.getElementById('summaryTime').textContent}`;
+          document.getElementById('successDepartment').textContent = document.getElementById('summaryDepartment').textContent;
+        } else {
+          alert('Anda harus menyetujui persyaratan sebelum melanjutkan.');
+        }
+      });
+      
+      // Print button
+      printButton.addEventListener('click', function() {
+        window.print();
+      });
+      
+      // Toggle additional fields based on selections
+      document.getElementById('diseaseOther').addEventListener('change', function() {
+        document.getElementById('diseaseOtherGroup').style.display = this.checked ? 'block' : 'none';
+      });
+      
+      document.getElementById('allergyDrug').addEventListener('change', function() {
+        document.getElementById('allergyDetailGroup').style.display = 
+          this.checked || document.getElementById('allergyFood').checked || document.getElementById('allergyOther').checked ? 'block' : 'none';
+      });
+      
+      document.getElementById('allergyFood').addEventListener('change', function() {
+        document.getElementById('allergyDetailGroup').style.display = 
+          this.checked || document.getElementById('allergyDrug').checked || document.getElementById('allergyOther').checked ? 'block' : 'none';
+      });
+      
+      document.getElementById('allergyOther').addEventListener('change', function() {
+        document.getElementById('allergyDetailGroup').style.display = 
+          this.checked || document.getElementById('allergyDrug').checked || document.getElementById('allergyFood').checked ? 'block' : 'none';
+      });
+      
+      document.getElementById('insuranceType').addEventListener('change', function() {
+        document.getElementById('insuranceNumberGroup').style.display = 
+          this.value && this.value !== 'umum' ? 'block' : 'none';
+      });
+      
+      document.getElementById('patientType').addEventListener('change', function() {
+        document.getElementById('medicalRecordGroup').style.display = 
+          this.value === 'lama' ? 'block' : 'none';
+      });
+      
+      // Initialize hidden fields
+      document.getElementById('diseaseOtherGroup').style.display = 'none';
+      document.getElementById('allergyDetailGroup').style.display = 'none';
+      document.getElementById('insuranceNumberGroup').style.display = 'none';
+      document.getElementById('medicalRecordGroup').style.display = 'none';
+    });
+  </script>
+</body>
+</html>
